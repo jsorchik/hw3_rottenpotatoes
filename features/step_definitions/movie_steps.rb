@@ -41,15 +41,14 @@ end
 
 Then /I should (not )?see movies that are rated: (.*)/ do |negated, rating_list|
   #check if movies shown count equls what is in the db
-  
-  ratings = rating_list.split(",")
+  #ratings = rating_list.split(",")
   db_count = 0
-  page_count = 0
-  ratings.each do |rating|
+  rating_list.split(",").each do |rating|
     db_count += Movie.find_all_by_rating(rating).size
   end
-  #debugger
-  page.all('table#movies tr').count.should == db_count +1 #add one to accomodate table header
+  debugger
+  db_count = Movie.find_all_by_rating(rating_list.split(","))
+  page.all('table#movies tr').count.should == db_count + 1 #add one to accomodate table header
 end
 
 When /I check all of the movies/ do |rating_list|
