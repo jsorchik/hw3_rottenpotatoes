@@ -35,29 +35,27 @@ When /I (un)?check the following ratings: (.*)/ do |uncheck, rating_list|
       check(rating)
     end
   end
-  #debugger
-  #assert_equal uncheck, "un"
 end
 
 Then /I should (not )?see movies that are rated: (.*)/ do |negated, rating_list|
-  #check if movies shown count equls what is in the db
-  #ratings = rating_list.split(",")
-  db_count = 0
-  rating_list.split(",").each do |rating|
-    db_count += Movie.find_all_by_rating(rating).size
-  end
-  debugger
-  db_count = Movie.find_all_by_rating(rating_list.split(","))
-  page.all('table#movies tr').count.should == db_count + 1 #add one to accomodate table header
+  #check if movies shown count equals what is in the dd
+  page.all('table#movies tr').count.should == 
+    Movie.find_all_by_rating(rating_list.split(",")).count + 1 #add one to accomodate table header
 end
 
-When /I check all of the movies/ do |rating_list|
-  ##
+When /I (un)?check all of the ratings/ do |uncheck|
+  Movie.all_ratings.each do |rating|
+    rating = "ratings_" + rating
+    if uncheck 
+      uncheck(rating)
+    else
+      check(rating)
+    end
+  end  
 end
 
-Then /I should see all of the movies/ do |negated, rating_list|
+Then /I should see all of the movies/ do
   #check if movies shown count equls what is in the db
-  debugger
-  ratings = rating_list.split(",")
-  #rows.should == value
+  page.all('table#movies tr').count.should ==
+    Movie.find_all_by_rating(Movie.all_ratings.split(",")).count + 1
 end
